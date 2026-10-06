@@ -31,12 +31,19 @@ class PremioController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'nombre' => 'required|string|max:100',
-            'color' => 'required|string|max:20',
+        $data = $request->validate([
+            'nombre'       => 'required|string|max:100',
+            'color'        => 'required|string|max:20',
             'probabilidad' => 'required|numeric|min:0',
+            'es_premio'    => 'nullable|boolean',
+            'activo'       => 'nullable|boolean',
         ]);
-        Premio::create($request->all());
+
+        $data['es_premio'] = $request->boolean('es_premio');
+        $data['activo']    = $request->boolean('activo');
+
+        Premio::create($data);
+
         return redirect()->route('admin.premios.index')->with('success', 'Premio creado.');
     }
 
@@ -61,12 +68,19 @@ class PremioController extends Controller
      */
     public function update(Request $request, Premio $premio)
     {
-        $request->validate([
-            'nombre' => 'required|string|max:100',
-            'color' => 'required|string|max:20',
+        $data = $request->validate([
+            'nombre'       => 'required|string|max:100',
+            'color'        => 'required|string|max:20',
             'probabilidad' => 'required|numeric|min:0',
+            'es_premio'    => 'nullable|boolean',
+            'activo'       => 'nullable|boolean',
         ]);
-        $premio->update($request->all());
+
+        $data['es_premio'] = $request->boolean('es_premio');
+        $data['activo']    = $request->boolean('activo');
+
+        $premio->update($data);
+
         return redirect()->route('admin.premios.index')->with('success', 'Premio actualizado.');
     }
 
