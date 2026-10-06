@@ -13,7 +13,7 @@ use App\Http\Controllers\Admin\ConfiguracionController;
 */
 
 // Página principal: la ruleta (reemplaza a welcome)
-Route::get('/', [RuletaController::class, 'index'])->name('ruleta.index');
+Route::get('/', \App\Livewire\RuletaPublica::class)->name('ruleta.index');
 
 // Procesar el giro de la ruleta
 Route::post('/girar', [RuletaController::class, 'girar'])

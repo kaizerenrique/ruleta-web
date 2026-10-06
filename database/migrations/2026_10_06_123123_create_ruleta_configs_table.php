@@ -14,12 +14,14 @@ return new class extends Migration
         Schema::create('ruleta_configs', function (Blueprint $table) {
             $table->id();
             $table->integer('max_giros_por_usuario')->default(1);
+            $table->string('tipo_limite', 10)->default('ip'); // ip | nick | ambos
             $table->boolean('captcha_activo')->default(true);
             $table->timestamps();
         });
 
         DB::table('ruleta_configs')->insert([
             'max_giros_por_usuario' => 1,
+            'tipo_limite' => 'ip',
             'captcha_activo' => true,
             'created_at' => now(),
             'updated_at' => now(),
