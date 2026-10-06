@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('premio_nombre', 100)->nullable();
             $table->ipAddress('ip')->nullable();
             $table->timestamp('fecha')->useCurrent();
+            $table->timestamps();
         });
     }
 
