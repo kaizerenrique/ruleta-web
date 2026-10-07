@@ -359,6 +359,8 @@
                     requestAnimationFrame(animar);
                 } else {
                     playWinFanfare();
+                    // ✅ Avisar a Livewire que la animación terminó
+                    Livewire.dispatch('spin-finished');
                 }
             }
             requestAnimationFrame(animar);
