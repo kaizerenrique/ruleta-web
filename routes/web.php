@@ -47,5 +47,9 @@ Route::middleware([
 
         Route::get('configuracion', [ConfiguracionController::class, 'edit'])->name('configuracion.edit');
         Route::put('configuracion', [ConfiguracionController::class, 'update'])->name('configuracion.update');
+
+        Route::get('aplicaciones', function () {
+            return view('admin.aplicaciones.index');
+        })->name('aplicaciones.index');
     });
 });

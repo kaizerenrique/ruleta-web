@@ -2,102 +2,203 @@
 <div
     class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 p-4">
 
-    <h1 class="text-5xl font-black mb-2 bg-gradient-to-b from-yellow-200 via-yellow-400 to-yellow-600 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] tracking-wider"
-        style="font-family: 'Georgia', serif;">
-        🎰 ¡GIRA LA RULETA! 🎰
-    </h1>
-    <p class="text-slate-300 mb-8 tracking-wide">Completa tus datos y prueba tu suerte</p>
+    @if (!$ruletaActiva)
+        {{-- ✅ PANTALLA DE RULETA INACTIVA --}}
+        <div class="max-w-md w-full text-center px-4">
+            <div class="text-7xl sm:text-8xl mb-6">🚫</div>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-black mb-4
+                       bg-gradient-to-b from-yellow-200 via-yellow-400 to-yellow-600
+                       bg-clip-text text-transparent
+                       drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] tracking-wider leading-tight"
+                style="font-family: 'Georgia', serif;">
+                Ruleta Inactiva
+            </h1>
+            <p class="text-slate-200 text-lg sm:text-xl mb-3">
+                La ruleta no está disponible en este momento.
+            </p>
+            <p class="text-slate-400 text-sm sm:text-base">
+                Por favor, intenta más tarde o contacta al organizador del evento.
+            </p>
+        </div>
+    @else
+        <h1 class="text-5xl font-black mb-2 bg-gradient-to-b from-yellow-200 via-yellow-400 to-yellow-600 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] tracking-wider"
+            style="font-family: 'Georgia', serif;">
+            🎰 ¡GIRA LA RULETA! 🎰
+        </h1>
+        <p class="text-slate-300 mb-8 tracking-wide">Completa tus datos y prueba tu suerte</p>
 
-    {{-- Modal --}}
-    @if ($mostrarModal)
-        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
-            {{-- ✅ Modal más ancho: max-w-lg en vez de max-w-md --}}
-            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 border-2 border-yellow-500/40">
-                <h2 class="text-2xl font-bold text-slate-800 mb-6 text-center">Ingresa tus datos</h2>
+        {{-- Modal --}}
+        @if ($mostrarModal)
+            <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
+                {{-- ✅ Modal más ancho: max-w-lg en vez de max-w-md --}}
+                <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 border-2 border-yellow-500/40">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-6 text-center">Ingresa tus datos</h2>
 
-                <form wire:submit="girar" class="space-y-4">
-                    <div>
-                        <input type="text" wire:model="nick" placeholder="Nick"
-                            class="w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none">
-                        @error('nick')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div>
-                        <input type="text" wire:model="nombre" placeholder="Nombre"
-                            class="w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none">
-                        @error('nombre')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div>
-                        <input type="text" wire:model="apellido" placeholder="Apellido"
-                            class="w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none">
-                        @error('apellido')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    {{-- ✅ Captcha con layout grid robusto --}}
-                    <div>
-                        <label class="block text-sm text-slate-600 mb-1">Código de verificación</label>
-                        <div class="grid grid-cols-[auto,1fr] gap-3 items-center">
-                            <img src="{{ captcha_src() }}" alt="captcha" id="captcha-img"
-                                class="h-12 w-auto border rounded-lg cursor-pointer bg-slate-50"
-                                onclick="this.src='{{ captcha_src() }}?'+Math.random()">
-                            <input type="text" wire:model="captcha" placeholder="Escribe el código"
-                                class="w-full min-w-0 border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-yellow-500 focus:outline-none">
+                    <form wire:submit="girar" class="space-y-3 sm:space-y-4">
+                        <div>
+                            <input type="text" wire:model="nick" placeholder="Nick" autocomplete="off"
+                                inputmode="text"
+                                class="w-full border border-slate-300 rounded-lg px-3 py-2.5 sm:px-4 sm:py-2
+                   text-base focus:ring-2 focus:ring-yellow-500 focus:outline-none">
+                            @error('nick')
+                                <span class="text-red-500 text-xs sm:text-sm">{{ $message }}</span>
+                            @enderror
                         </div>
-                        @error('captcha')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
+
+                        <div>
+                            <input type="text" wire:model="nombre" placeholder="Nombre" autocomplete="given-name"
+                                class="w-full border border-slate-300 rounded-lg px-3 py-2.5 sm:px-4 sm:py-2
+                   text-base focus:ring-2 focus:ring-yellow-500 focus:outline-none">
+                            @error('nombre')
+                                <span class="text-red-500 text-xs sm:text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <input type="text" wire:model="apellido" placeholder="Apellido"
+                                autocomplete="family-name"
+                                class="w-full border border-slate-300 rounded-lg px-3 py-2.5 sm:px-4 sm:py-2
+                   text-base focus:ring-2 focus:ring-yellow-500 focus:outline-none">
+                            @error('apellido')
+                                <span class="text-red-500 text-xs sm:text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        {{-- ✅ NUEVO: selector de aplicación --}}
+                        <div>
+                            <label class="block text-xs sm:text-sm text-slate-600 mb-1">
+                                ¿De qué aplicación vienes? <span class="text-red-500">*</span>
+                            </label>
+                            <select wire:model="aplicacion_id" required
+                                class="w-full border border-slate-300 rounded-lg px-3 py-2.5 sm:px-4 sm:py-2
+                       text-base bg-white focus:ring-2 focus:ring-yellow-500 focus:outline-none">
+                                <option value="">— Selecciona una opción —</option>
+                                @foreach ($aplicaciones as $app)
+                                    <option value="{{ $app->id }}">{{ $app->nombre }}</option>
+                                @endforeach
+                            </select>
+                            @error('aplicacion_id')
+                                <span class="text-red-500 text-xs sm:text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        {{-- Captcha --}}
+                        <div>
+                            <label class="block text-xs sm:text-sm text-slate-600 mb-1">
+                                Código de verificación
+                            </label>
+                            <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 sm:items-center">
+                                <img src="{{ captcha_src() }}" alt="captcha" id="captcha-img"
+                                    class="h-11 sm:h-12 w-auto self-center sm:self-auto border rounded-lg cursor-pointer bg-slate-50"
+                                    onclick="this.src='{{ captcha_src() }}?'+Math.random()">
+                                <input type="text" wire:model="captcha" placeholder="Escribe el código"
+                                    autocomplete="off" inputmode="text"
+                                    class="w-full min-w-0 border border-slate-300 rounded-lg px-3 py-2.5 sm:px-4 sm:py-2
+                       text-base focus:ring-2 focus:ring-yellow-500 focus:outline-none">
+                            </div>
+                            @error('captcha')
+                                <span class="text-red-500 text-xs sm:text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        @if ($mensajeError)
+                            <div class="bg-red-100 text-red-700 p-3 rounded-lg text-xs sm:text-sm">
+                                {{ $mensajeError }}
+                            </div>
+                        @endif
+
+                        <button type="submit"
+                            class="w-full bg-gradient-to-b from-yellow-400 to-yellow-600
+               hover:from-yellow-500 hover:to-yellow-700
+               active:from-yellow-500 active:to-yellow-700
+               text-slate-900 font-black py-3 rounded-lg
+               shadow-lg shadow-yellow-500/30 transition tracking-wide
+               text-base sm:text-lg touch-manipulation">
+                            🎯 INICIAR GIRO
+                        </button>
+                    </form>
+                </div>
+            </div>
+        @endif
+
+        {{-- Contenedor de la ruleta --}}
+        <div id="wheel-container" class="{{ $mostrarModal ? 'hidden' : '' }} relative">
+            <div id="pointer" class="absolute top-[-22px] left-1/2 -translate-x-1/2 z-20">
+                <svg width="48" height="60" viewBox="0 0 48 60">
+                    <defs>
+                        <linearGradient id="pointerGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#fef3c7" />
+                            <stop offset="40%" stop-color="#facc15" />
+                            <stop offset="70%" stop-color="#a16207" />
+                            <stop offset="100%" stop-color="#422006" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M24 58 L8 12 Q24 2 40 12 Z" fill="url(#pointerGrad)" stroke="#78350f" stroke-width="2" />
+                    <ellipse cx="24" cy="14" rx="6" ry="3" fill="white"
+                        opacity="0.35" />
+                </svg>
+            </div>
+
+            <canvas id="wheel" width="600" height="600"
+                class="rounded-full shadow-2xl drop-shadow-[0_0_40px_rgba(250,204,21,0.25)]"></canvas>
+        </div>
+
+        {{-- ✅ DESPUÉS --}}
+        {{-- Mensaje de resultado: varía según si el premio es real o "sin premio" --}}
+        @if ($premioGanador && $mostrarResultado)
+            <div class="mt-6 sm:mt-8 text-center animate-fade-in px-4 max-w-2xl">
+
+                @if ($premioGanador->es_premio)
+                    {{-- ✅ Caso 1: el usuario ganó un premio real --}}
+                    <div
+                        class="text-3xl sm:text-4xl md:text-5xl font-black
+                        bg-gradient-to-b from-yellow-200 via-yellow-400 to-yellow-600
+                        bg-clip-text text-transparent
+                        drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] leading-tight">
+                        🎉 ¡FELICIDADES, {{ strtoupper($nick) }}! 🎉
                     </div>
 
-                    @if ($mensajeError)
-                        <div class="bg-red-100 text-red-700 p-3 rounded-lg text-sm">{{ $mensajeError }}</div>
-                    @endif
+                    <div
+                        class="text-base sm:text-lg text-yellow-200 mt-3 sm:mt-4 tracking-widest uppercase font-semibold">
+                        Has ganado
+                    </div>
 
-                    <button type="submit"
-                        class="w-full bg-gradient-to-b from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-slate-900 font-black py-3 rounded-lg shadow-lg shadow-yellow-500/30 transition tracking-wide">
-                        🎯 INICIAR GIRO
-                    </button>
-                </form>
+                    <div
+                        class="text-2xl sm:text-3xl md:text-4xl font-black text-white mt-1 sm:mt-2
+                        break-words px-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
+                        {{ $premioGanador->nombre }}
+                    </div>
+
+                    <div
+                        class="mt-4 sm:mt-6 inline-block px-4 py-2 rounded-full
+                        bg-emerald-500/20 border border-emerald-400/40">
+                        <p class="text-emerald-300 text-xs sm:text-sm font-medium">
+                            📸 Muestra esta pantalla al organizador para reclamar tu premio
+                        </p>
+                    </div>
+                @else
+                    {{-- ❌ Caso 2: el usuario cayó en "sin premio" --}}
+                    <div
+                        class="text-3xl sm:text-4xl md:text-5xl font-black
+                        bg-gradient-to-b from-slate-300 via-slate-400 to-slate-500
+                        bg-clip-text text-transparent
+                        drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] leading-tight">
+                        😔 ¡CASI, {{ strtoupper($nick) }}!
+                    </div>
+
+                    <div class="text-2xl sm:text-3xl font-bold text-slate-200 mt-3 sm:mt-4">
+                        {{ $premioGanador->nombre }}
+                    </div>
+
+                    <div class="mt-4 sm:mt-6">
+                        <p class="text-slate-400 text-sm sm:text-base">
+                            No fue esta vez. ¡Gracias por participar!
+                        </p>
+                    </div>
+                @endif
+
             </div>
-        </div>
-    @endif
-
-    {{-- Contenedor de la ruleta --}}
-    <div id="wheel-container" class="{{ $mostrarModal ? 'hidden' : '' }} relative">
-        <div id="pointer" class="absolute top-[-22px] left-1/2 -translate-x-1/2 z-20">
-            <svg width="48" height="60" viewBox="0 0 48 60">
-                <defs>
-                    <linearGradient id="pointerGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#fef3c7" />
-                        <stop offset="40%" stop-color="#facc15" />
-                        <stop offset="70%" stop-color="#a16207" />
-                        <stop offset="100%" stop-color="#422006" />
-                    </linearGradient>
-                </defs>
-                <path d="M24 58 L8 12 Q24 2 40 12 Z" fill="url(#pointerGrad)" stroke="#78350f" stroke-width="2" />
-                <ellipse cx="24" cy="14" rx="6" ry="3" fill="white" opacity="0.35" />
-            </svg>
-        </div>
-
-        <canvas id="wheel" width="600" height="600"
-            class="rounded-full shadow-2xl drop-shadow-[0_0_40px_rgba(250,204,21,0.25)]"></canvas>
-    </div>
-
-    {{-- ✅ DESPUÉS --}}
-    @if ($premioGanador && $mostrarResultado)
-        <div class="mt-8 text-center animate-fade-in">
-            <div
-                class="text-5xl font-black bg-gradient-to-b from-yellow-200 via-yellow-400 to-yellow-600 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
-                🎉 ¡GANASTE! 🎉
-            </div>
-            <div class="text-3xl font-bold text-white mt-2">
-                {{ $premioGanador->nombre }}
-            </div>
-        </div>
+        @endif
     @endif
 </div>
 

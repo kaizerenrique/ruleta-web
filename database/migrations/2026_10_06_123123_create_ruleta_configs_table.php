@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('max_giros_por_usuario')->default(1);
             $table->string('tipo_limite', 10)->default('ip'); // ip | nick | ambos
             $table->boolean('captcha_activo')->default(true);
+            $table->boolean('activa')->default(true); 
             $table->timestamps();
         });
 

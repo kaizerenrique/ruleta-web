@@ -7,33 +7,57 @@ use Livewire\Attributes\On;
 use App\Models\Premio;
 use App\Models\Resultado;
 use App\Models\RuletaConfig;
+use App\Models\Aplicacion;
 
 class RuletaPublica extends Component
 {
     public $nick = '';
     public $nombre = '';
     public $apellido = '';
+    public $aplicacion_id = ''; // ✅ NUEVO
     public $captcha = '';
     public $mostrarModal = true;
     public $mensajeError = '';
     public $premioGanador = null;
     public $girando = false;
-    public $mostrarResultado = false; // ✅ NUEVO: solo true al terminar la animación
+    public $mostrarResultado = false;
+    public $ruletaActiva = true;
 
     protected $rules = [
         'nick' => 'required|string|max:50|regex:/^[a-zA-Z0-9_]+$/',
         'nombre' => 'required|string|max:100',
         'apellido' => 'required|string|max:100',
+        'aplicacion_id' => 'required|exists:aplicaciones,id', // ✅ NUEVO
         'captcha' => 'required|captcha',
     ];
 
+    protected $messages = [
+        'aplicacion_id.required' => 'Debes seleccionar una aplicación.',
+        'aplicacion_id.exists' => 'La aplicación seleccionada no es válida.',
+    ];
+
+    public function mount()
+    {
+        $config = RuletaConfig::first();
+        $this->ruletaActiva = $config?->activa ?? true;
+        if (!$this->ruletaActiva) {
+            $this->mostrarModal = false;
+        }
+    }
+
     public function girar()
     {
+        $config = RuletaConfig::first();
+        if (!$config?->activa) {
+            $this->ruletaActiva = false;
+            $this->mostrarModal = false;
+            return;
+        }
+
         $this->validate();
 
-        $config = RuletaConfig::first();
-        $maxGiros = $config?->max_giros_por_usuario ?? 1;
-        $tipoLimite = $config?->tipo_limite ?? 'ip';
+        $maxGiros = $config->max_giros_por_usuario ?? 1;
+        $tipoLimite = $config->tipo_limite ?? 'ip';
         $ip = request()->ip();
 
         $girosPorIp = Resultado::where('ip', $ip)->count();
@@ -79,6 +103,7 @@ class RuletaPublica extends Component
             'nick' => $this->nick,
             'nombre' => $this->nombre,
             'apellido' => $this->apellido,
+            'aplicacion_id' => $this->aplicacion_id, // ✅ NUEVO
             'premio_id' => $premioSeleccionado->id,
             'premio_nombre' => $premioSeleccionado->nombre,
             'ip' => $ip,
@@ -87,15 +112,14 @@ class RuletaPublica extends Component
         $this->premioGanador = $premioSeleccionado;
         $this->mostrarModal = false;
         $this->girando = true;
-        $this->mostrarResultado = false; // ✅ Asegurar que el mensaje NO se muestre todavía
+        $this->mostrarResultado = false;
 
-        // ✅ Avisar al JS para que empiece a girar
-        $this->dispatch('spin-to', ganadorId: $premioSeleccionado->id);
+        $this->dispatch('spin-to',
+            ganadorId: $premioSeleccionado->id,
+            esPremio: (bool) $premioSeleccionado->es_premio
+        );
     }
 
-    /**
-     * ✅ Llamado desde el JS al terminar la animación.
-     */
     #[On('spin-finished')]
     public function finalizarGiro()
     {
@@ -106,6 +130,7 @@ class RuletaPublica extends Component
     {
         return view('livewire.ruleta-publica', [
             'premios' => Premio::where('activo', true)->orderBy('id')->get(),
+            'aplicaciones' => Aplicacion::where('activo', true)->orderBy('nombre')->get(), // ✅ NUEVO
         ])->layout('layouts.guest');
     }
 }

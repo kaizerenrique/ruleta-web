@@ -16,6 +16,13 @@ return new class extends Migration
             $table->string('nick', 50)->index();
             $table->string('nombre', 100);
             $table->string('apellido', 100);
+
+            // ✅ Sin ->after(). El orden de declaración define la posición
+            $table->foreignId('aplicacion_id')
+                  ->nullable()
+                  ->constrained('aplicacions')
+                  ->nullOnDelete();
+
             $table->foreignId('premio_id')->nullable()->constrained('premios')->onDelete('set null');
             $table->string('premio_nombre', 100)->nullable();
             $table->ipAddress('ip')->nullable();

@@ -24,6 +24,10 @@
                         Resultados
                     </x-nav-link>
 
+                    <x-nav-link href="{{ route('admin.aplicaciones.index') }}" :active="request()->routeIs('admin.aplicaciones.*')">
+                        Aplicaciones
+                    </x-nav-link>
+
                     <x-nav-link href="{{ route('admin.configuracion.edit') }}" :active="request()->routeIs('admin.configuracion.*')">
                         Configuración
                     </x-nav-link>
@@ -167,6 +171,10 @@
 
             <x-responsive-nav-link href="{{ route('admin.resultados.index') }}" :active="request()->routeIs('admin.resultados.*')">
                 Resultados
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link href="{{ route('admin.aplicaciones.index') }}" :active="request()->routeIs('admin.aplicaciones.*')">
+                Aplicaciones
             </x-responsive-nav-link>
 
             <x-responsive-nav-link href="{{ route('admin.configuracion.edit') }}" :active="request()->routeIs('admin.configuracion.*')">
