@@ -27,7 +27,7 @@ class RuletaPublica extends Component
         'nick' => 'required|string|max:50|regex:/^[a-zA-Z0-9_]+$/',
         'nombre' => 'required|string|max:100',
         'apellido' => 'required|string|max:100',
-        'aplicacion_id' => 'required|exists:aplicaciones,id', // ✅ NUEVO
+        'aplicacion_id' => 'required|exists:aplicacions,id',
         'captcha' => 'required|captcha',
     ];
 
