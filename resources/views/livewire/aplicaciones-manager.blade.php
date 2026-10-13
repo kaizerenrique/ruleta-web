@@ -14,8 +14,9 @@
             Listado de Aplicaciones
         </h3>
         <button wire:click="abrirModal"
-                class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm transition
-                       w-full sm:w-auto">
+            class="bg-indigo-600 hover:bg-indigo-700 text-white
+               px-4 py-2.5 rounded-lg text-sm transition
+               w-full sm:w-auto touch-manipulation">
             ➕ Nueva Aplicación
         </button>
     </div>
@@ -28,7 +29,9 @@
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">#</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nombre</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase hidden md:table-cell">Descripción</th>
+                        <th
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase hidden md:table-cell">
+                            Descripción</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estado</th>
                         <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Acciones</th>
                     </tr>
@@ -43,7 +46,8 @@
                             </td>
                             <td class="px-6 py-4">
                                 @if ($app->activo)
-                                    <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700 font-medium">
+                                    <span
+                                        class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700 font-medium">
                                         ● Activa
                                     </span>
                                 @else
@@ -54,11 +58,13 @@
                             </td>
                             <td class="px-6 py-4 text-right space-x-3">
                                 <button wire:click="editar({{ $app->id }})"
-                                        class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                                    class="text-indigo-600 hover:text-indigo-800 text-sm font-medium
+               touch-manipulation px-2 py-1">
                                     Editar
                                 </button>
                                 <button wire:click="confirmarEliminar({{ $app->id }})"
-                                        class="text-red-600 hover:text-red-800 text-sm font-medium">
+                                    class="text-red-600 hover:text-red-800 text-sm font-medium
+               touch-manipulation px-2 py-1">
                                     Eliminar
                                 </button>
                             </td>
@@ -81,8 +87,9 @@
     {{-- Modal Crear / Editar --}}
     @if ($mostrarModal)
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-             wire:key="modal-crear-editar">
-            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6
+            wire:key="modal-crear-editar">
+            <div
+                class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6
                         max-h-[95vh] overflow-y-auto">
 
                 <h3 class="text-xl font-bold text-slate-800 mb-4">
@@ -96,8 +103,8 @@
                             Nombre de la aplicación <span class="text-red-500">*</span>
                         </label>
                         <input type="text" wire:model.blur="nombre" required maxlength="100"
-                               placeholder="Ej: Tienda Online, App Móvil, Portal de Clientes"
-                               class="w-full border-gray-300 rounded-lg shadow-sm
+                            placeholder="Ej: Tienda Online, App Móvil, Portal de Clientes"
+                            class="w-full border-gray-300 rounded-lg shadow-sm
                                       focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         @error('nombre')
                             <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
@@ -109,8 +116,8 @@
                             Descripción <span class="text-gray-400 font-normal">(opcional)</span>
                         </label>
                         <textarea wire:model.blur="descripcion" rows="3" maxlength="255"
-                                  placeholder="Breve descripción de la aplicación o su propósito"
-                                  class="w-full border-gray-300 rounded-lg shadow-sm
+                            placeholder="Breve descripción de la aplicación o su propósito"
+                            class="w-full border-gray-300 rounded-lg shadow-sm
                                          focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
                         @error('descripcion')
                             <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
@@ -119,19 +126,18 @@
 
                     <label class="inline-flex items-center cursor-pointer">
                         <input type="checkbox" wire:model="activo"
-                               class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
+                            class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
                         <span class="ml-2 text-gray-700">Aplicación activa</span>
                     </label>
 
                     <div class="flex flex-col sm:flex-row gap-3 pt-2">
                         <button type="button" wire:click="cerrarModal"
-                                class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold
+                            class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold
                                        py-2.5 rounded-lg transition">
                             Cancelar
                         </button>
-                        <button type="submit"
-                                wire:loading.attr="disabled"
-                                class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold
+                        <button type="submit" wire:loading.attr="disabled"
+                            class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold
                                        py-2.5 rounded-lg transition disabled:opacity-50">
                             <span wire:loading.remove wire:target="guardar">
                                 {{ $editandoId ? 'Actualizar' : 'Guardar' }}
@@ -147,7 +153,7 @@
     {{-- Modal de confirmación para eliminar --}}
     @if ($confirmandoEliminarId)
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-             wire:key="modal-eliminar">
+            wire:key="modal-eliminar">
             <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center">
 
                 <div class="text-5xl mb-4">⚠️</div>
@@ -162,13 +168,12 @@
 
                 <div class="flex flex-col sm:flex-row gap-3">
                     <button wire:click="cancelarEliminar"
-                            class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold
+                        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold
                                    py-2.5 rounded-lg transition">
                         Cancelar
                     </button>
-                    <button wire:click="eliminar"
-                            wire:loading.attr="disabled"
-                            class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold
+                    <button wire:click="eliminar" wire:loading.attr="disabled"
+                        class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold
                                    py-2.5 rounded-lg transition disabled:opacity-50">
                         <span wire:loading.remove wire:target="eliminar">Eliminar</span>
                         <span wire:loading wire:target="eliminar">Eliminando...</span>
