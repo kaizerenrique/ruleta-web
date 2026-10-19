@@ -1,58 +1,131 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🎰 Ruleta de Premios
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplicación web de ruleta interactiva con panel de administración, estadísticas en tiempo real y control de participación por IP/nick. Construida con Laravel 13, Jetstream, Livewire 3 y Tailwind CSS.
 
-## About Laravel
+Los usuarios completan un formulario (nick, nombre, apellido, aplicación de origen, captcha) y giran la ruleta. El sistema registra cada giro y permite al administrador gestionar premios, aplicaciones, límites y visualizar estadísticas detalladas.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📑 Índice
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- [Características](#-características)
+- [Stack técnico](#-stack-técnico)
+- [Requisitos](#-requisitos)
+- [Instalación local](#-instalación-local)
+- [Configuración](#-configuración)
+- [Uso](#-uso)
+- [Estructura del proyecto](#-estructura-del-proyecto)
+- [Base de datos](#-base-de-datos)
+- [Seeders disponibles](#-seeders-disponibles)
+- [Despliegue en producción](#-despliegue-en-producción)
+- [Mantenimiento](#-mantenimiento)
+- [Contribuir](#-contribuir)
+- [Licencia](#-licencia)
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## ✨ Características
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 🎡 Ruleta pública
+- Ruleta animada estilo casino con canvas HTML5 (render dorado, pins, rim metálico).
+- Puntero con física simulada: se "patea" al pasar cada segmento.
+- Audio generado con Web Audio API (ticks al girar, fanfarria al ganar, sonido al perder).
+- Formulario con validación en tiempo real vía Livewire.
+- Captcha (Mews Captcha) configurable.
+- Selección de aplicación de origen.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### 🔒 Control de participación
+- Límite de giros por IP, por nick o ambos.
+- Ventana temporal configurable:
+  - Últimas 24 horas (por defecto)
+  - Últimos 7 días
+  - Últimos 30 días
+  - Sin límite temporal
+- Mensajes claros al usuario cuando alcanza el límite.
 
-## Agentic Development
+### 🛠️ Panel de administración
+- **Premios**: CRUD completo con color hex, probabilidad, tipo (premio/sin premio) y estado activo.
+- **Aplicaciones**: CRUD de las apps de origen (para saber de dónde viene cada usuario).
+- **Resultados**: listado paginado con filtros (nick, premio, aplicación, fechas) y exportación a CSV.
+- **Configuración**: activar/desactivar la ruleta, límites de giros, periodo, captcha.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 📊 Dashboard de estadísticas
+- KPIs: total giros, premios entregados, tasa de conversión, participantes únicos, giros hoy/7d/30d.
+- Gráfico de línea con los giros de los últimos 14 días.
+- Gráfico dona con distribución premios vs sin premio.
+- Top 5 premios más entregados.
+- Top 5 aplicaciones con más participación.
+- Tabla con los últimos 10 giros en tiempo real.
+
+### 🔐 Autenticación
+- Laravel Fortify + Jetstream con Livewire.
+- Login, registro, recuperación de contraseña, verificación de email, 2FA.
+- Passkeys (WebAuthn).
+- Sesiones en base de datos.
+- API tokens (Sanctum).
+
+---
+
+## 🧰 Stack técnico
+
+| Capa | Tecnología |
+|---|---|
+| Framework | Laravel 13.x |
+| PHP | ^8.3 |
+| Autenticación | Laravel Fortify + Jetstream 5 |
+| Componentes reactivos | Livewire 3 |
+| Estilos | Tailwind CSS 3 + plugins (forms, typography) |
+| Build | Vite 8 |
+| Base de datos | MySQL / MariaDB / SQLite |
+| Captcha | mews/captcha |
+| Gráficos | Chart.js 4 (vía CDN) |
+| Internacionalización | laravel-lang (es / en) |
+
+---
+
+## 📦 Requisitos
+
+- **PHP** >= 8.3 con extensiones: `bcmath`, `ctype`, `curl`, `dom`, `fileinfo`, `gd`, `json`, `mbstring`, `openssl`, `pdo`, `tokenizer`, `xml`
+- **Composer** 2.x
+- **Node.js** >= 20 + npm
+- **MySQL** 8+ / MariaDB 10.6+ (o SQLite para desarrollo local)
+- Servidor web: Nginx (recomendado) o Apache
+
+---
+
+## 🚀 Instalación local
 
 ```bash
-composer require laravel/boost --dev
+# 1. Clonar el repositorio
+git clone <url-del-repo> ruleta
+cd ruleta
 
-php artisan boost:install
-```
+# 2. Instalar dependencias PHP
+composer install
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+# 3. Copiar el archivo de entorno
+cp .env.example .env
 
-## Contributing
+# 4. Generar la clave de aplicación
+php artisan key:generate
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# 5. Configurar la base de datos en .env
+#    (ver sección "Configuración" abajo)
 
-## Code of Conduct
+# 6. Ejecutar migraciones
+php artisan migrate
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# 7. Cargar datos de demo (opcional pero recomendado)
+php artisan db:seed --class=AplicacionesSeeder
+php artisan db:seed --class=PremiosDemoSeeder
 
-## Security Vulnerabilities
+# 8. Instalar dependencias JS y compilar
+npm install
+npm run build
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# 9. Crear el enlace simbólico de storage
+php artisan storage:link
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# 10. Levantar el servidor de desarrollo
+php artisan serve
+# → http://localhost:8000

@@ -15,6 +15,7 @@ class ConfiguracionController extends Controller
             'max_giros_por_usuario' => 1,
             'captcha_activo' => true,
             'tipo_limite' => 'ip',
+            'periodo_limite' => 'dia',
             'activa' => true,
         ]);
         return view('admin.configuracion.edit', compact('config'));
@@ -25,12 +26,14 @@ class ConfiguracionController extends Controller
         $request->validate([
             'max_giros_por_usuario' => 'required|integer|min:1|max:100',
             'tipo_limite' => 'required|in:ip,nick,ambos',
+            'periodo_limite' => 'required|in:dia,semana,mes,siempre',
         ]);
 
         RuletaConfig::first()->update([
             'max_giros_por_usuario' => $request->max_giros_por_usuario,
             'captcha_activo' => $request->boolean('captcha_activo'),
             'tipo_limite' => $request->tipo_limite,
+            'periodo_limite' => $request->periodo_limite,
             'activa' => $request->boolean('activa'),
         ]);
 

@@ -5,6 +5,7 @@ use App\Http\Controllers\RuletaController;
 use App\Http\Controllers\Admin\PremioController;
 use App\Http\Controllers\Admin\ResultadoController;
 use App\Http\Controllers\Admin\ConfiguracionController;
+use App\Http\Controllers\Admin\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,10 +33,8 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
-    // Dashboard de Jetstream
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Panel de administración de la ruleta
     Route::prefix('admin')->name('admin.')->group(function () {

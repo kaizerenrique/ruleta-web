@@ -17,12 +17,14 @@ return new class extends Migration
             $table->string('tipo_limite', 10)->default('ip'); // ip | nick | ambos
             $table->boolean('captcha_activo')->default(true);
             $table->boolean('activa')->default(true); 
+            $table->string('periodo_limite', 20)->default('dia');
             $table->timestamps();
         });
 
         DB::table('ruleta_configs')->insert([
             'max_giros_por_usuario' => 1,
             'tipo_limite' => 'ip',
+            'periodo_limite' => 'dia',
             'captcha_activo' => true,
             'created_at' => now(),
             'updated_at' => now(),

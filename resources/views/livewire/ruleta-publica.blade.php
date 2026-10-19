@@ -683,7 +683,7 @@
             spinGrad.addColorStop(0.5, '#fef9c3');
             spinGrad.addColorStop(1, '#d4af37');
             ctx.fillStyle = spinGrad;
-            ctx.fillText('SPIN', CX, CY - 12);
+            ctx.fillText('GIRA', CX, CY - 12);
 
             // Línea "&"
             ctx.font = 'bold 12px "Georgia", serif';
@@ -697,7 +697,7 @@
             goldGrad.addColorStop(0.5, '#fef9c3');
             goldGrad.addColorStop(1, '#d4af37');
             ctx.fillStyle = goldGrad;
-            ctx.fillText('GOLD', CX, CY + 15);
+            ctx.fillText('GANA', CX, CY + 15);
 
             // Estrella central
             ctx.font = 'bold 14px sans-serif';

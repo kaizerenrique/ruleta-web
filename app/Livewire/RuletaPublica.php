@@ -58,10 +58,27 @@ class RuletaPublica extends Component
 
         $maxGiros = $config->max_giros_por_usuario ?? 1;
         $tipoLimite = $config->tipo_limite ?? 'ip';
+        $periodo = $config->periodo_limite ?? 'dia';
         $ip = request()->ip();
 
-        $girosPorIp = Resultado::where('ip', $ip)->count();
-        $girosPorNick = Resultado::where('nick', $this->nick)->count();
+        // Determinar fecha de inicio según el periodo
+        $desde = match ($periodo) {
+            'dia' => now()->subDay(),
+            'semana' => now()->subWeek(),
+            'mes' => now()->subMonth(),
+            default => null, // 'siempre'
+        };
+
+        $queryIp = Resultado::where('ip', $ip);
+        $queryNick = Resultado::where('nick', $this->nick);
+
+        if ($desde) {
+            $queryIp->where('fecha', '>=', $desde);
+            $queryNick->where('fecha', '>=', $desde);
+        }
+
+        $girosPorIp = $queryIp->count();
+        $girosPorNick = $queryNick->count();
 
         $bloqueado = false;
         $razones = [];
@@ -76,7 +93,14 @@ class RuletaPublica extends Component
         }
 
         if ($bloqueado) {
-            $this->mensajeError = 'Has alcanzado el límite de giros permitidos (' . $maxGiros . ') desde ' . implode(' y ', $razones) . '.';
+            $periodoTexto = match ($periodo) {
+                'dia' => 'en las últimas 24 horas',
+                'semana' => 'en los últimos 7 días',
+                'mes' => 'en los últimos 30 días',
+                default => '',
+            };
+            $this->mensajeError = 'Has alcanzado el límite de giros permitidos (' . $maxGiros . ') '
+                . $periodoTexto . ' desde ' . implode(' y ', $razones) . '.';
             return;
         }
 
@@ -103,7 +127,7 @@ class RuletaPublica extends Component
             'nick' => $this->nick,
             'nombre' => $this->nombre,
             'apellido' => $this->apellido,
-            'aplicacion_id' => $this->aplicacion_id, // ✅ NUEVO
+            'aplicacion_id' => $this->aplicacion_id,
             'premio_id' => $premioSeleccionado->id,
             'premio_nombre' => $premioSeleccionado->nombre,
             'ip' => $ip,
@@ -114,7 +138,8 @@ class RuletaPublica extends Component
         $this->girando = true;
         $this->mostrarResultado = false;
 
-        $this->dispatch('spin-to',
+        $this->dispatch(
+            'spin-to',
             ganadorId: $premioSeleccionado->id,
             esPremio: (bool) $premioSeleccionado->es_premio
         );
