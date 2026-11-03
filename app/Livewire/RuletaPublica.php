@@ -23,13 +23,23 @@ class RuletaPublica extends Component
     public $mostrarResultado = false;
     public $ruletaActiva = true;
 
-    protected $rules = [
-        'nick' => 'required|string|max:50|regex:/^[a-zA-Z0-9_]+$/',
-        'nombre' => 'required|string|max:100',
-        'apellido' => 'required|string|max:100',
-        'aplicacion_id' => 'required|exists:aplicacions,id',
-        'captcha' => 'required|captcha',
-    ];
+    protected function rules(): array
+    {
+        $config = RuletaConfig::first();
+
+        $rules = [
+            'nick'          => 'required|string|max:50|regex:/^[a-zA-Z0-9_]+$/',
+            'nombre'        => 'required|string|max:100',
+            'apellido'      => 'required|string|max:100',
+            'aplicacion_id' => 'required|exists:aplicacions,id',
+        ];
+
+        if ($config?->captcha_activo) {
+            $rules['captcha'] = 'required|captcha';
+        }
+
+        return $rules;
+    }
 
     protected $messages = [
         'aplicacion_id.required' => 'Debes seleccionar una aplicación.',
@@ -153,9 +163,12 @@ class RuletaPublica extends Component
 
     public function render()
     {
+        $config = RuletaConfig::first();
+
         return view('livewire.ruleta-publica', [
-            'premios' => Premio::where('activo', true)->orderBy('id')->get(),
-            'aplicaciones' => Aplicacion::where('activo', true)->orderBy('nombre')->get(), // ✅ NUEVO
+            'premios'       => Premio::where('activo', true)->orderBy('id')->get(),
+            'aplicaciones'  => Aplicacion::where('activo', true)->orderBy('nombre')->get(),
+            'captchaActivo' => (bool) ($config?->captcha_activo ?? true),
         ])->layout('layouts.guest');
     }
 }
