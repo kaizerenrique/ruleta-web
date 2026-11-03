@@ -9,29 +9,36 @@
                         <x-application-mark class="block h-9 w-auto" />
                     </a>
                 </div>
-
+                
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                    @role('admin')
+                        <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
 
-                    <x-nav-link href="{{ route('admin.premios.index') }}" :active="request()->routeIs('admin.premios.*')">
-                        Premios
-                    </x-nav-link>
+                        <x-nav-link href="{{ route('admin.premios.index') }}" :active="request()->routeIs('admin.premios.*')">
+                            Premios
+                        </x-nav-link>
 
-                    <x-nav-link href="{{ route('admin.resultados.index') }}" :active="request()->routeIs('admin.resultados.*')">
-                        Resultados
-                    </x-nav-link>
+                        <x-nav-link href="{{ route('admin.resultados.index') }}" :active="request()->routeIs('admin.resultados.*')">
+                            Resultados
+                        </x-nav-link>
 
-                    <x-nav-link href="{{ route('admin.aplicaciones.index') }}" :active="request()->routeIs('admin.aplicaciones.*')">
-                        Aplicaciones
-                    </x-nav-link>
+                        <x-nav-link href="{{ route('admin.aplicaciones.index') }}" :active="request()->routeIs('admin.aplicaciones.*')">
+                            Aplicaciones
+                        </x-nav-link>
 
-                    <x-nav-link href="{{ route('admin.configuracion.edit') }}" :active="request()->routeIs('admin.configuracion.*')">
-                        Configuración
-                    </x-nav-link>
+                        <x-nav-link href="{{ route('admin.usuarios.index') }}" :active="request()->routeIs('admin.usuarios.*')">
+                            Usuarios
+                        </x-nav-link>
+
+                        <x-nav-link href="{{ route('admin.configuracion.edit') }}" :active="request()->routeIs('admin.configuracion.*')">
+                            Configuración
+                        </x-nav-link>
+                    @endrole
                 </div>
+                
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">

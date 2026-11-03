@@ -2,10 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RuletaController;
-use App\Http\Controllers\Admin\PremioController;
-use App\Http\Controllers\Admin\ResultadoController;
-use App\Http\Controllers\Admin\ConfiguracionController;
-use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\{
+    PremioController,
+    ResultadoController,
+    ConfiguracionController,
+    DashboardController,
+    UserController,
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -31,14 +34,15 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    'role:admin',
 ])->group(function () {
-
-    // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Panel de administración de la ruleta
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('premios', PremioController::class);
+        Route::resource('usuarios', UserController::class)
+            ->parameters(['usuarios' => 'usuario'])
+            ->except(['show']);
 
         Route::get('resultados', [ResultadoController::class, 'index'])->name('resultados.index');
         Route::get('resultados/export', [ResultadoController::class, 'export'])->name('resultados.export');
@@ -47,8 +51,7 @@ Route::middleware([
         Route::get('configuracion', [ConfiguracionController::class, 'edit'])->name('configuracion.edit');
         Route::put('configuracion', [ConfiguracionController::class, 'update'])->name('configuracion.update');
 
-        Route::get('aplicaciones', function () {
-            return view('admin.aplicaciones.index');
-        })->name('aplicaciones.index');
+        Route::get('aplicaciones', fn() => view('admin.aplicaciones.index'))
+            ->name('aplicaciones.index');
     });
 });
