@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Premio;
-
+use Illuminate\Http\Request;
 
 class PremioController extends Controller
 {
@@ -15,6 +14,7 @@ class PremioController extends Controller
     public function index()
     {
         $premios = Premio::orderBy('id')->paginate(10);
+
         return view('admin.premios.index', compact('premios'));
     }
 
@@ -32,15 +32,15 @@ class PremioController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'nombre'       => 'required|string|max:100',
-            'color'        => 'required|string|max:20',
-            'probabilidad' => 'required|numeric|min:0',
-            'es_premio'    => 'nullable|boolean',
-            'activo'       => 'nullable|boolean',
+            'nombre' => 'required|string|max:100',
+            'color' => 'required|string|max:20',
+            'probabilidad' => 'required|numeric|min:0|max:999.99',
+            'es_premio' => 'nullable|boolean',
+            'activo' => 'nullable|boolean',
         ]);
 
         $data['es_premio'] = $request->boolean('es_premio');
-        $data['activo']    = $request->boolean('activo');
+        $data['activo'] = $request->boolean('activo');
 
         Premio::create($data);
 
@@ -48,19 +48,11 @@ class PremioController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Premio $premio)
     {
-        return view('admin.premios.edit', compact('premio')); 
+        return view('admin.premios.edit', compact('premio'));
     }
 
     /**
@@ -69,15 +61,15 @@ class PremioController extends Controller
     public function update(Request $request, Premio $premio)
     {
         $data = $request->validate([
-            'nombre'       => 'required|string|max:100',
-            'color'        => 'required|string|max:20',
-            'probabilidad' => 'required|numeric|min:0',
-            'es_premio'    => 'nullable|boolean',
-            'activo'       => 'nullable|boolean',
+            'nombre' => 'required|string|max:100',
+            'color' => 'required|string|max:20',
+            'probabilidad' => 'required|numeric|min:0|max:999.99',
+            'es_premio' => 'nullable|boolean',
+            'activo' => 'nullable|boolean',
         ]);
 
         $data['es_premio'] = $request->boolean('es_premio');
-        $data['activo']    = $request->boolean('activo');
+        $data['activo'] = $request->boolean('activo');
 
         $premio->update($data);
 
@@ -90,6 +82,7 @@ class PremioController extends Controller
     public function destroy(Premio $premio)
     {
         $premio->delete();
+
         return redirect()->route('admin.premios.index')->with('success', 'Premio eliminado.');
     }
 }

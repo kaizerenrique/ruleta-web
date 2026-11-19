@@ -1,14 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\ConfiguracionController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PremioController;
+use App\Http\Controllers\Admin\ResultadoController;
+use App\Http\Controllers\Admin\UserController;
+use App\Livewire\RuletaPublica;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RuletaController;
-use App\Http\Controllers\Admin\{
-    PremioController,
-    ResultadoController,
-    ConfiguracionController,
-    DashboardController,
-    UserController,
-};
 
 /*
 |--------------------------------------------------------------------------
@@ -17,12 +15,7 @@ use App\Http\Controllers\Admin\{
 */
 
 // Página principal: la ruleta (reemplaza a welcome)
-Route::get('/', \App\Livewire\RuletaPublica::class)->name('ruleta.index');
-
-// Procesar el giro de la ruleta
-Route::post('/girar', [RuletaController::class, 'girar'])
-    ->middleware('throttle:10,1')
-    ->name('ruleta.girar');
+Route::get('/', RuletaPublica::class)->name('ruleta.index');
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +32,7 @@ Route::middleware([
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::prefix('admin')->name('admin.')->group(function () {
-        Route::resource('premios', PremioController::class);
+        Route::resource('premios', PremioController::class)->except(['show']);
         Route::resource('usuarios', UserController::class)
             ->parameters(['usuarios' => 'usuario'])
             ->except(['show']);
@@ -51,7 +44,7 @@ Route::middleware([
         Route::get('configuracion', [ConfiguracionController::class, 'edit'])->name('configuracion.edit');
         Route::put('configuracion', [ConfiguracionController::class, 'update'])->name('configuracion.update');
 
-        Route::get('aplicaciones', fn() => view('admin.aplicaciones.index'))
+        Route::get('aplicaciones', fn () => view('admin.aplicaciones.index'))
             ->name('aplicaciones.index');
     });
 });

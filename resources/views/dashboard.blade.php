@@ -171,13 +171,17 @@
                                         {{ $r->aplicacion?->nombre ?? '—' }}
                                     </td>
                                     <td class="px-5 py-3">
-                                        @if ($r->premio?->es_premio)
+                                        @if ($r->es_premio === true)
                                             <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-xs font-semibold">
                                                 🎁 {{ $r->premio_nombre }}
                                             </span>
-                                        @else
+                                        @elseif ($r->es_premio === false)
                                             <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 text-xs">
                                                 ❌ {{ $r->premio_nombre ?? 'Sin premio' }}
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs">
+                                                ⚠️ Clasificación desconocida
                                             </span>
                                         @endif
                                     </td>
@@ -249,7 +253,7 @@
                         labels: distribucion.labels,
                         datasets: [{
                             data: distribucion.data,
-                            backgroundColor: ['#f59e0b', '#6b7280'],
+                            backgroundColor: ['#f59e0b', '#6b7280', '#94a3b8'],
                             borderColor: '#fff',
                             borderWidth: 2,
                         }],
