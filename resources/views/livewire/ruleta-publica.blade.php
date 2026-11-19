@@ -12,13 +12,10 @@
                        bg-clip-text text-transparent
                        drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] tracking-wider leading-tight"
                 style="font-family: 'Georgia', serif;">
-                Ruleta Inactiva
+                🎁 Próximamente habrá nuevas oportunidades
             </h1>
             <p class="text-slate-200 text-base sm:text-lg md:text-xl mb-3">
-                La ruleta no está disponible en este momento.
-            </p>
-            <p class="text-slate-400 text-sm sm:text-base">
-                Por favor, intenta más tarde o contacta al organizador del evento.
+                Gracias por ser parte de VEVPoker. No te pierdas nuestras promociones y días de recompensas. Consulta con tu agente.
             </p>
         </div>
     @else
@@ -28,12 +25,12 @@
                    bg-clip-text text-transparent
                    drop-shadow-[0_2px_6px_rgba(212,175,55,0.5)] tracking-wider"
             style="font-family: 'Georgia', serif;">
-            🎰 ¡GIRA LA RULETA! 🎰
+            LA RULETA ESTÁ GIRANDO...
         </h1>
         <p
             class="text-amber-200/70 mb-5 sm:mb-8 tracking-widest
                   text-xs sm:text-sm text-center px-4 uppercase">
-            Completa tus datos y prueba tu suerte
+            Probando tu suerte - Exclusivo en VEVPOKER.COM
         </p>
 
         {{-- Modal de Datos --}}
@@ -95,7 +92,7 @@
 
                         <div>
                             <label class="block text-xs sm:text-sm text-amber-200/70 mb-1">
-                                ¿De qué aplicación vienes? <span class="text-red-400">*</span>
+                                ¿En qué app prefieres el premio? <span class="text-red-400">*</span>
                             </label>
                             <select wire:model="aplicacion_id" required
                                 class="w-full bg-zinc-800/60 border border-amber-500/30
@@ -237,7 +234,10 @@
 
                     <div class="mt-4 sm:mt-6 inline-block px-3 py-2 sm:px-4 rounded-full bg-amber-500/20 border border-amber-400/50">
                         <p class="text-amber-200 text-xs sm:text-sm font-medium">
-                            📸 Muestra esta pantalla al organizador para reclamar tu premio
+                            📸 Presenta esta pantalla al organizador para recibir tu premio en VEVPOKER
+                        </p>
+                        <p class="text-gray-700 dark:text-gray-300 text-xs mt-1">
+                            *Aplican términos y condiciones. Consulta con tu agente.
                         </p>
                     </div>
                 @else
@@ -256,7 +256,7 @@
 
                     <div class="mt-4 sm:mt-6">
                         <p class="text-slate-500 text-sm sm:text-base">
-                            No fue esta vez. ¡Gracias por participar!
+                            ¡Gracias por participar y ser parte de VEVPOKER!
                         </p>
                     </div>
                 @endif

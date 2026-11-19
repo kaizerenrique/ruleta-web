@@ -115,14 +115,7 @@ class RuletaPublica extends Component
             }
 
             if ($razones !== []) {
-                $periodoTexto = match ($periodo) {
-                    'dia' => 'en las últimas 24 horas',
-                    'semana' => 'en los últimos 7 días',
-                    'mes' => 'en los últimos 30 días',
-                    default => '',
-                };
-                $this->mensajeError = 'Has alcanzado el límite de giros permitidos ('.$maxGiros.') '
-                    .$periodoTexto.' desde '.implode(' y ', $razones).'.';
+                $this->mensajeError = 'Gracias por participar. Completaste el Giro de hoy. ¡Mantente atento a nuestras próximas oportunidades! 🍀';
 
                 return null;
             }
