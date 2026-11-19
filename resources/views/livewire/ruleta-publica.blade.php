@@ -203,7 +203,7 @@
                 👀 Observa los premios...
             </p>
             <p class="text-amber-200/70 text-sm mt-1 uppercase tracking-widest">
-                El giro comenzará en unos segundos
+                Preparando tu giro...
             </p>
         </div>
         {{-- 👆 FIN MENSAJE PREPARACIÓN 👆 --}}
@@ -362,7 +362,7 @@
             osc.type = 'square';
             osc.frequency.setValueAtTime(1400, t);
             osc.frequency.exponentialRampToValueAtTime(500, t + 0.025);
-            gain.gain.setValueAtTime(0.10, t);
+            gain.gain.setValueAtTime(Math.min(0.10 * 1.10, 1.0), t);
             gain.gain.exponentialRampToValueAtTime(0.001, t + 0.035);
             osc.connect(gain).connect(a.destination);
             osc.start(t);
@@ -399,7 +399,7 @@
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(freq, t);
                 gain.gain.setValueAtTime(0, t);
-                gain.gain.linearRampToValueAtTime(0.10, t + 0.03);
+                gain.gain.linearRampToValueAtTime(Math.min(0.10 * 1.30, 1.0), t + 0.03);
                 gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
                 osc.connect(gain).connect(a.destination);
                 osc.start(t);
@@ -714,7 +714,7 @@
             }, 200);
         });
 
-        // ===== LISTENER CON RETRASO DE 5 SEGUNDOS =====
+        // ===== LISTENER CON RETRASO DE 4 SEGUNDOS =====
         document.addEventListener('livewire:init', () => {
             Livewire.on('spin-to', (payload) => {
                 const data = Array.isArray(payload) ? payload[0] : payload;
@@ -734,7 +734,7 @@
                 const readyMsg = document.getElementById('ready-message');
                 if (readyMsg) readyMsg.classList.remove('hidden');
 
-                // 3. ⏳ RETRASO DE 5 SEGUNDOS
+                // 3. ⏳ RETRASO DE 4 SEGUNDOS
                 setTimeout(() => {
                     // Ocultamos el mensaje
                     if (readyMsg) readyMsg.classList.add('hidden');
@@ -744,7 +744,7 @@
                         const idx = premios.findIndex(p => p.id === ganadorId);
                         if (idx >= 0) girarHacia(idx, esPremio);
                     });
-                }, 5000); // 5000 ms = 5 segundos
+                }, 4000);
             });
         });
     })();
